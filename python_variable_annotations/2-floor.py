@@ -1,0 +1,12 @@
+#!/usr/bin/env python3
+"""
+Type annotated module floor which takes
+a float n as argument and returns the floor of the float.
+"""
+
+import math
+
+
+def floor(n: float) -> int:
+    """Returns the floor of the float."""
+    return math.floor(n)

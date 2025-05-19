@@ -2,7 +2,6 @@
 """
 filtered_logger module.
 """
-
 import re
 from typing import List
 

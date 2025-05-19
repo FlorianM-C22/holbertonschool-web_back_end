@@ -92,3 +92,27 @@ def get_db() -> mysql.connector.connection.MySQLConnection:
         logger = get_logger()
         logger.error(f"Database connection failed: {err}")
         return None
+
+
+def main():
+    """Obtain a database connection using get_db
+    and retrieve all rows in the users table"""
+    logger = get_logger()
+    conn = get_db()
+    cur = conn.cursor()
+
+    cur.execute("SELECT * FROM users")
+    data = cur.fetchall()
+
+    columns = [col[0] for col in cur.description]
+    for row in data:
+        formatted_row = "; ".join([f"{col}={val}"
+                                   for col, val in zip(columns, row)])
+        logger.info(formatted_row)
+
+    cur.close()
+    conn.close()
+
+
+if __name__ == "__main__":
+    main()

@@ -77,7 +77,7 @@ def create_user() -> str:
     error_msg = None
     try:
         rj = request.get_json()
-    except Exception as e:
+    except Exception:
         rj = None
     if rj is None:
         error_msg = "Wrong format"

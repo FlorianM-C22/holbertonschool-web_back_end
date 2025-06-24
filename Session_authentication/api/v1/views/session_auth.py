@@ -2,9 +2,10 @@
 """
 SessionAuth module
 """
-from flask import jsonify, request
+from flask import jsonify, request, abort
 from api.v1.views import app_views
 from models.user import User
+from api.v1.app import auth
 import os
 
 
@@ -29,7 +30,6 @@ def login():
     if not user.is_valid_password(password):
         return jsonify({"error": "wrong password"}), 401
 
-    from api.v1.app import auth
     session_id = auth.create_session(user.id)
 
     response = jsonify(user.to_json())
@@ -37,3 +37,12 @@ def login():
     response.set_cookie(session_name, session_id)
 
     return response
+
+
+@app_views.route("/auth_session/logout", methods=['DELETE'], strict_slashes=False)
+def logout():
+    """Session authentication
+    """
+    if auth.destroy_session(request):
+        return jsonify({}), 200
+    abort(404)

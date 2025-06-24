@@ -2,7 +2,7 @@
 """
 SessionAuth module
 """
-from flask import jsonify, abort, request
+from flask import jsonify
 from api.v1.views import app_views
 from models.user import User
 import os
@@ -10,12 +10,7 @@ import os
 
 @app_views.route("/auth_session/login", methods=['POST'], strict_slashes=False)
 def login():
-    """
-    Return:
-      - User object JSON represented
-      - 400 if email or password missing
-      - 404 if no user found
-      - 401 if wrong password
+    """Session authentication
     """
     email = request.form.get("email")
     password = request.form.get("password")

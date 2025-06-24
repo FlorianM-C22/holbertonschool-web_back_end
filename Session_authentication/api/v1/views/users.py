@@ -13,7 +13,6 @@ def view_all_users() -> str:
       - list of all User objects JSON represented
     """
     all_users = [user.to_json() for user in User.all()]
-
     return jsonify(all_users)
 
 
@@ -29,15 +28,15 @@ def view_one_user(user_id: str = None) -> str:
     if user_id is None:
         abort(404)
     if user_id == "me":
-        user = getattr(request, 'current_user', None)
+        if request.current_user is None:
+            abort(404)
+
+        user = request.current_user
+    else:
+        user = User.get(user_id)
         if user is None:
             abort(404)
-        return jsonify(user.to_json())
 
-    user = User.get(user_id)
-
-    if user is None:
-        abort(404)
     return jsonify(user.to_json())
 
 
@@ -52,9 +51,7 @@ def delete_user(user_id: str = None) -> str:
     """
     if user_id is None:
         abort(404)
-
     user = User.get(user_id)
-
     if user is None:
         abort(404)
     user.remove()
@@ -77,7 +74,7 @@ def create_user() -> str:
     error_msg = None
     try:
         rj = request.get_json()
-    except Exception:
+    except Exception as e:
         rj = None
     if rj is None:
         error_msg = "Wrong format"
@@ -129,17 +126,4 @@ def update_user(user_id: str = None) -> str:
     if rj.get('last_name') is not None:
         user.last_name = rj.get('last_name')
     user.save()
-    return jsonify(user.to_json()), 200
-
-
-@app_views.route('/users/me', methods=['GET'], strict_slashes=False)
-def get_me() -> str:
-    """ GET /api/v1/users/me
-    Return:
-      - User object JSON represented
-      - 404 if the User ID doesn't exist
-    """
-    user = request.current_user
-    if user is None:
-        abort(404)
     return jsonify(user.to_json()), 200

@@ -144,3 +144,6 @@ cython_debug/
 Thumbs.db
 ehthumbs.db
 Desktop.ini
+
+# Database
+a.db

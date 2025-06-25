@@ -2,10 +2,10 @@
 """
 Basic Flask app for user authentication service.
 
-This module provides a Flask web application with endpoints for user registration,
-login/logout, profile management, and password reset functionality. The app uses
-the Auth class for all authentication operations and maintains user sessions
-through cookies.
+This module provides a Flask web application with endpoints for user
+registration, login/logout, profile management, and password reset
+functionality. The app uses the Auth class for all authentication
+operations and maintains user sessions through cookies.
 
 Routes:
     GET /: Welcome message
@@ -23,7 +23,6 @@ from auth import Auth
 
 app = Flask(__name__)
 
-# Global Auth instance for handling all authentication operations
 AUTH = Auth()
 
 
@@ -163,5 +162,4 @@ def update_password():
 
 
 if __name__ == "__main__":
-    # Run the Flask application on all interfaces, port 5000
     app.run(host="0.0.0.0", port="5000")

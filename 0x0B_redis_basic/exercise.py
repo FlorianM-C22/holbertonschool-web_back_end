@@ -25,7 +25,6 @@ def replay(method: Callable):
     """
     Display the history of calls of a particular function
     """
-    # Create a Redis instance to access the stored data
     r = redis.Redis()
     key = method.__qualname__
     inputs = f"{key}:inputs"

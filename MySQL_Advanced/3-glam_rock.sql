@@ -1,9 +1,6 @@
 -- 3. Old school band
 
--- Select band_name and style columns
-SELECT band_name, style
+SELECT band_name, (IFNULL(split, 2024) - formed) as lifespan
 FROM metal_bands
--- Filter for glam rock bands
-WHERE style LIKE '%Glam rock%'
--- Order by the number of fans in descending order
-ORDER BY fans DESC;
+WHERE style LIKE "%Glam rock%"
+ORDER BY (IFNULL(split, 2024) - formed) DESC;

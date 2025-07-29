@@ -1,9 +1,7 @@
 -- 2. Best band ever!
 
 -- Select origin and nb_fans columns
-SELECT 
-    origin, 
-    nb_fans,
-    RANK() OVER (ORDER BY nb_fans ASC) as rank
+SELECT origin, SUM(fans) as nb_fans
 FROM metal_bands
-ORDER BY nb_fans ASC;
+GROUP BY origin
+ORDER BY SUM(fans) DESC;

@@ -9,22 +9,6 @@ from typing import Union, Callable
 from functools import wraps
 
 
-def call_history(method: Callable) -> Callable:
-    """
-    Decorator that stores method calls in Redis
-    """
-    @wraps(method)
-    def wrapper(self, *args):
-        key = method.__qualname__
-        inputs = f"{key}:inputs"
-        outputs = f"{key}:outputs"
-        self._redis.rpush(inputs, str(args))
-        data = method(self, *args)
-        self._redis.rpush(outputs, data)
-        return data
-    return wrapper
-
-
 def count_calls(method: Callable) -> Callable:
     """
     Decorator that counts method calls using Redis
@@ -34,6 +18,40 @@ def count_calls(method: Callable) -> Callable:
         key = method.__qualname__
         self._redis.incr(key)
         return method(self, *args, **kwargs)
+    return wrapper
+
+
+def replay(method: Callable):
+    """
+    Display the history of calls of a particular function
+    """
+    # Create a Redis instance to access the stored data
+    r = redis.Redis()
+    key = method.__qualname__
+    inputs = f"{key}:inputs"
+    outputs = f"{key}:outputs"
+    count = r.get(key)
+    inputs_list = r.lrange(inputs, 0, -1)
+    outputs_list = r.lrange(outputs, 0, -1)
+
+    print(f"{key} was called {count.decode('utf-8') if count else 0} times:")
+    for i, o in zip(inputs_list, outputs_list):
+        print(f"{key}(*{i.decode('utf-8')}) -> {o.decode('utf-8')}")
+
+
+def call_history(method: Callable) -> Callable:
+    """
+    Decorator that stores method calls in Redis
+    """
+    @wraps(method)
+    def wrapper(self, *args, **kwargs):
+        key = method.__qualname__
+        inputs = f"{key}:inputs"
+        outputs = f"{key}:outputs"
+        self._redis.rpush(inputs, str(args))
+        data = method(self, *args, **kwargs)
+        self._redis.rpush(outputs, str(data))
+        return data
     return wrapper
 
 

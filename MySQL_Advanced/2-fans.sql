@@ -1,6 +1,9 @@
 -- 2. Best band ever!
 
 -- Select origin and nb_fans columns
-SELECT origin, nb_fans FROM metal_bands
--- Order by the number of fans in ascending order
+SELECT 
+    origin, 
+    nb_fans,
+    RANK() OVER (ORDER BY nb_fans ASC) as rank
+FROM metal_bands
 ORDER BY nb_fans ASC;

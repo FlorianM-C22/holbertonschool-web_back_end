@@ -1,0 +1,15 @@
+{
+  "name": "unittests_in_js",
+  "version": "1.0.0",
+  "description": "****Read or watch:****",
+  "license": "ISC",
+  "author": "",
+  "type": "commonjs",
+  "main": "index.js",
+  "scripts": {
+    "test": "mocha"
+  },
+  "devDependencies": {
+    "mocha": "^11.7.2"
+  }
+}

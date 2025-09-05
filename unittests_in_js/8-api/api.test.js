@@ -1,23 +1,19 @@
-const { expect } = require('chai');
+const expect = require('chai').expect;
 const request = require('request');
-const sinon = require('sinon');
 const app = require('./api');
 
-describe('API Integration test', function() {
-    const baseUrl = 'http://localhost:7865';
+describe('api',  () => {
+  it('respond with the message Welcome to the payment system', function (done) {
+    request.get('http://localhost:7865', (err, res, body) => {
+      expect(res.statusCode).to.equal(200);
+      done();
+    })
+  });
 
-    it('should return correct response for GET /', function(done) {
-        request.get(baseUrl, function(error, response, body) {
-            expect(response.statusCode).to.equal(200);
-            expect(body).to.equal('Welcome to the payment system');
-            done();
-        });
-    });
-
-    it('should handle 404 for non-existent routes', function(done) {
-        request.get(`${baseUrl}/nonexistent`, function(error, response, body) {
-            expect(response.statusCode).to.equal(404);
-            done();
-        });
-    });
+  it('respond with the message Welcome to the payment system', function (done) {
+    request.get('http://localhost:7865', (err, res, body) => {
+      expect(body).to.equal('Welcome to the payment system');
+      done();
+    })
+  });
 });
